@@ -31,7 +31,7 @@ jobs:
         run: |
           if [ -d "docs/browser" ]; then
             echo "Moving files from docs/browser to docs..."
-            cp -r docs/browser/* docs/
+            cp -r docs/browser/* docs/docs/
             rm -rf docs/browser
             echo "Files moved successfully"
           fi
