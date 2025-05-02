@@ -38,3 +38,10 @@ jobs:
         run: npx angular-cli-ghpages --dir=docs --name="GitHub Actions" --email=actions@github.com --no-silent --message="Deploy to GitHub pages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Rename browser folder
+        run: |
+          mv docs browser
+          rm -rf docs
+          mv browser docs
+        # This is to ensure the folder structure is correct for GitHub Pages
