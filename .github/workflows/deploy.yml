@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
       - name: Set up Node
         uses: actions/setup-node@v3
@@ -21,12 +23,18 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      - name: Install angular-cli-ghpages
+        run: npm install -g angular-cli-ghpages
+
       - name: Build Angular App
         run: npm run build -- --configuration production
+        # This will build to the 'docs' folder as specified in angular.json
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: dist/browser
-          token: '${{ secrets.GITHUB_TOKEN }}'
+      - name: Create .nojekyll file
+        run: touch docs/.nojekyll
+        # This prevents GitHub from ignoring files that start with underscores
+
+      - name: Deploy with angular-cli-ghpages
+        run: npx angular-cli-ghpages --dir=docs --name="GitHub Actions" --email=actions@github.com --no-silent --message="Deploy to GitHub pages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
